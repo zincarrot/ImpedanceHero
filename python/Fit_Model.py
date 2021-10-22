@@ -3,7 +3,7 @@
 """
 Created on Sun Nov  1 15:22:54 2020
 
-@author: jialei, zeke
+@author: jialei, zincarrot
 """
 
 

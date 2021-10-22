@@ -2,16 +2,10 @@
 """
 Created on Sat Dec  5 14:46:37 2020
 
-@author: admin
+@author: zincarrot
 """
 
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Nov  1 15:22:54 2020
-
-@author: Zhaonan
-"""
 
 import numpy as np
 import matplotlib.pyplot as plt

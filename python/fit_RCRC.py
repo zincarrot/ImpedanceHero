@@ -2,7 +2,7 @@
 """
 Created on Sun Oct 10 20:09:19 2021
 
-@author: zinc
+@author: zincarrot
 """
 
 import numpy as np

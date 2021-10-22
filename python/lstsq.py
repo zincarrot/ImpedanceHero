@@ -2,7 +2,7 @@
 """
 Created on Mon Feb 15 15:38:10 2021
 
-@author: wizar
+@author: zincarrot
 """
 
 from scipy.linalg import lstsq
