@@ -1,0 +1,11 @@
+function z=RCRC(R1,C1,R2,C2,a,b,c,f)
+ZC1=1./(2j.*pi.*f.*C1);
+ZC2=1./(2j.*pi.*f.*C2);
+R1C1=(R1.^a+ZC1.^a).^(1/a);
+R2C2=(R2.^b+ZC2.^b).^(1/b);
+z=(R1C1.^c+R2C2.^c).^(1/c);
+% R1C1=(R1.^a+ZC1.^a).^-1;
+% R2C2=(R2.^b+ZC2.^b).^-1;
+% z=(R1C1.^c+R2C2.^c);
+%plotecplx(z,f,1);
+end
