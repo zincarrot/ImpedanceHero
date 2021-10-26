@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Dec 16 23:21:29 2020
-
 @author: zincarrot
 """
 
@@ -25,8 +23,10 @@ def process_raw(fname,flist):
     imp_data[imp_data>1e30] = np.nan
     imp_mean = np.nanmean(imp_data, axis=0)
     imp_std = np.mean(np.nanstd(imp_data, axis=0),axis=1)
-    imp_comp = imp_mean[:, 0] + imp_mean[:, 1] * (0 + 1j)
-    return imp_comp,imp_std
+    # imp_comp = imp_mean[:, 0] + imp_mean[:, 1] * (0 + 1j)
+    imp_real=imp_mean[:, 0]
+    imp_imag=imp_mean[:, 1]
+    return imp_real,imp_imag,imp_std
 
 def get_flist(fname):
     with open(fname) as f:
@@ -57,8 +57,8 @@ def process_raw_all(folder):
             flist=get_flist(os.path.join(folder,dir))
             
         if re.match('\d{8}_Sensor\d+_Test_\d+.xlsx',dir):
-            impedance,std=process_raw(os.path.join(folder,dir),flist)
-            processed_data=np.vstack([flist,impedance])
+            real,imag,std=process_raw(os.path.join(folder,dir),flist)
+            processed_data=np.vstack([flist,real,imag])
             processed_std=np.vstack([flist,std])
             np.savetxt(savedir+'\\'+re.findall(r'Sensor\d+_Test_\d+',dir)[0]+'_data.csv',processed_data,delimiter=',')
             np.savetxt(savedir+'\\'+re.findall(r'Sensor\d+_Test_\d+',dir)[0]+'_std.csv',processed_std,delimiter=',')

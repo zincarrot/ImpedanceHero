@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.optimize import minimize
+from scipy.optimize import basinhopping
 from sympy import *
 
 # %%
@@ -98,7 +99,7 @@ bounds = np.asarray([bounds_min, bounds_max]).T
 hi_freq_para = np.array([0.5, 0.5, 1, 1, 1, 1, 1])
 lo_freq_para = np.array([1, 1, 0.7, 0.7, 0.5, 1, 0.3])
 
-N = 10000
+N = 100
 x_ini_mat = np.array(np.random.uniform(size=N * 8)).reshape([N, 8])
 x_ini_mat = x_ini_mat * (np.array(bounds_max) - np.array(bounds_min)) + bounds_min
 
@@ -269,7 +270,7 @@ for it in range(len(T_list)):
     # obj=[obj_logzMSE_all,obj_logzMSE,obj_logzMSE_rollAngle,obj_logzMSE_rollMag]
     # obj=[obj_logzMSE_all,obj_zMSE_all,obj_cMSE_all,obj_yMSE_all,obj_mMSE_all]
     obj=[obj_logzMSE_all]
-    opt = minimize(obj[0], x_init, method='L-BFGS-B', bounds=bounds, options={'maxiter': 200})
+    opt = basinhopping(obj[0], x_init, method='L-BFGS-B', bounds=bounds, options={'maxiter': 200})
     x_opt = opt.x
     obj_function = opt.fun
     print(x_opt)
