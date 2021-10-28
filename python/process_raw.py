@@ -38,10 +38,10 @@ def get_flist(fname):
                 return flist
 
 def saveprocessed(savedir,flist,impedance,std=None):
-    processed_data=np.vstack(flist,impedance)
+    processed_data=np.vstack(flist,impedance).T
     np.savetxt(savedir+'\\data.csv',processed_data,delimiter=',')
     if std!=None:
-        processed_std=np.vstack(flist,std)
+        processed_std=np.vstack(flist,std).T
         np.savetxt(savedir+'\\std.csv',processed_std,delimiter=',')
 
 def process_raw_all(folder):
