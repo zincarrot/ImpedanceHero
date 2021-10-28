@@ -17,7 +17,7 @@ from sympy import *
 
 np.random.seed(0)
 
-measure_data = pd.read_excel(r'9.15 Cell Growth/9-15 cell density.xlsx').to_numpy()
+measure_data = pd.read_excel(r'E:\\Dropbox (GaTech)\\Lab files\\code\\Impedance_fit\\raw_data\\20200818_saline\\20200818_Sensor0_Test_1 - Copy.xlsx').to_numpy()
 measure_data = measure_data[:, 2].reshape(9, 3)
 T_list = range(1,177)
 T_list2 = [2, 14, 26, 82, 94, 106, 117, 130, 176]

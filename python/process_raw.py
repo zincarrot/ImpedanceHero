@@ -16,8 +16,7 @@ def process_raw(fname,flist):
     fname: file name of raw data
     flist: frequency list (read from parameter)
     '''
-
-    imp_data = pd.read_excel(fname).to_numpy()
+    imp_data = pd.read_excel(fname, index_col=None).to_numpy()
     imp_data = np.reshape(imp_data, [imp_data.shape[0], len(flist), 5])[:, :, 2:4]
     imp_data[imp_data == 0] = np.nan
     imp_data[imp_data>1e30] = np.nan
@@ -65,5 +64,6 @@ def process_raw_all(folder):
 
 if __name__ == '__main__':
     dirs=os.listdir('.\\raw_data')
-    process_raw_all('.\\raw_data\\'+'9.20 Cell Growth')
+    # fname=r'E:\\Dropbox (GaTech)\\Lab files\\code\\Impedance_fit\\raw_data\\20200818_saline\\20200818_Sensor0_Test_1 - Copy.xlsx'
+    process_raw_all('E:\\Dropbox (GaTech)\\Lab files\\code\\Impedance_fit\\raw_data\\20200818_saline')
     
