@@ -39,6 +39,7 @@ def get_flist(fname):
 
 def saveprocessed(savedir,flist,impedance,std=None):
     processed_data=np.vstack(flist,impedance).T
+    print(processed_data)
     np.savetxt(savedir+'\\data.csv',processed_data,delimiter=',')
     if std!=None:
         processed_std=np.vstack(flist,std).T
