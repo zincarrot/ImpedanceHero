@@ -76,6 +76,12 @@ class ImpedanceHero():
         self.data[:, 1] = imp_mag
         self.data[:, 2] = imp_ang
 
+    def impedance_fit(data, modelname, inital_params, method):
+        pass
+
+    def plot_result():
+        pass
+
     def build_model(self, circuit, name):
         def parse_circuit(circuit, count=-1):
             if type(circuit) == list:
@@ -127,13 +133,15 @@ class ImpedanceHero():
 
         with open("eq_models.py", "r") as file:
             if name in self.list_models():
-                raise NameError("Model name already exists!")
+                print("Model name already exists! No new model created")
+                return
             print("Model name is available. Proceed to create new model")
             file.close()
 
         with open("eq_models.py", "a") as file:
             file.write("\n")
-            file.write("def "+name+"(f, params):\n")
+            file.write("def "+name+"(f, params): ")
+            file.write("# "+str(circuit)+"\n")
             file.write("    return " + parse_circuit(circuit)[0])
             file.close()
 
@@ -145,6 +153,15 @@ class ImpedanceHero():
                     mlist.append(line.split(" ")[1].split("(")[0])
             file.close()
         return mlist
+
+    def get_model_layout(self, name):
+        with open("eq_models.py", "r") as file:
+            for line in file.readlines():
+                if line.startswith("def "):
+                    if line.split(" ")[1].split("(")[0] == name:
+                        file.close()
+                        return line.split("#")[-1][1:-1]
+            
 
         # elif circuit.key()=="C":
         #     return 1/(2j*np.pi*freq*circuit.value())
