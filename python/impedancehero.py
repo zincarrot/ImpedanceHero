@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import os.path
 
 
 class ImpedanceHero():
@@ -74,3 +75,82 @@ class ImpedanceHero():
         imp_ang = np.angle(imp_cplx, deg=True)
         self.data[:, 1] = imp_mag
         self.data[:, 2] = imp_ang
+
+    def build_model(self, circuit, name):
+        def parse_circuit(circuit, count=-1):
+            if type(circuit) == list:
+                impedance = "( "
+                for subcircuit in circuit:
+                    new_impedance, count = parse_circuit(subcircuit, count)
+                    impedance += new_impedance
+                    impedance += " + "
+                impedance = impedance[:-2]
+                impedance += ")"
+                return impedance, count
+
+            elif type(circuit) == tuple:
+                impedance = "1 / ( "
+                for subcircuit in circuit:
+                    impedance += "1 / ( "
+                    new_impedance, count = parse_circuit(subcircuit, count)
+                    impedance += new_impedance
+                    impedance += " ) + "
+                impedance = impedance[:-2]
+                impedance += ")"
+                return impedance, count
+
+            elif circuit == "C":
+                count += 1
+                return f"1 / (2j * np.pi * f * params[{count}])", count
+
+            elif circuit == "R":
+                count += 1
+                return f"params[{count}]", count
+
+            elif circuit == "L":
+                count += 1
+                return f"2j * np.pi * f * params[{count}]", count
+
+            elif circuit == "E":
+                count += 2
+                return f"1 / ( params[{count-1}] * ((2j * np.pi * f) ** params[{count}]))", count
+
+            elif type(circuit) == str:
+                raise ValueError(f"Unsupported element: "+circuit)
+            else:
+                raise TypeError(f"Unsupported impedance type: {type(circuit)}")
+
+        if not os.path.isfile("eq_models.py"):
+            with open("eq_models.py", "w") as file:
+                file.write("import numpy as np\n\n")
+                file.close()
+
+        with open("eq_models.py", "r") as file:
+            if name in self.list_models():
+                raise NameError("Model name already exists!")
+            print("Model name is available. Proceed to create new model")
+            file.close()
+
+        with open("eq_models.py", "a") as file:
+            file.write("\n")
+            file.write("def "+name+"(f, params):\n")
+            file.write("    return " + parse_circuit(circuit)[0])
+            file.close()
+
+    def list_models(self):
+        mlist=[]
+        with open("eq_models.py", "r") as file:
+            for line in file.readlines():
+                if line.startswith("def "):
+                    mlist.append(line.split(" ")[1].split("(")[0])
+            file.close()
+        return mlist
+
+        # elif circuit.key()=="C":
+        #     return 1/(2j*np.pi*freq*circuit.value())
+        # elif circuit.key()=="R":
+        #     return circuit.value()
+        # elif circuit.key()=="L":
+        #     return 2j*np.pi*freq*circuit.value()
+        # elif circuit.key()=="E":
+        #     return 1/(2j*np.pi*freq*circuit.value())
