@@ -14,12 +14,12 @@ if [ ! -d "$input_folder" ]; then
 fi
 
 if [ ! -d "$output_folder" ]; then
-  echo "Creating output folder: $output_folder"
+  # echo "Creating output folder: $output_folder"
   mkdir "$output_folder"
 fi
 
 for file in "$input_folder"/*.xlsx; do
-  filename=$(basename "$file")
+  # filename=$(basename "$file")
   /Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to xlsx "$file" --outdir "$output_folder"
-  echo "Repaired $filename and saved to $output_folder"
+  # echo "Repaired $filename and saved to $output_folder"
 done

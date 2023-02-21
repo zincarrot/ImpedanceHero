@@ -18,6 +18,28 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.feature_selection import RFE
 
 
+def generate_features(features_in):
+
+    
+
+    return features_out
+
+def rfe_regression(features, data):
+
+    # Create linear regression object
+    lr = LinearRegression()
+
+    # Create recursive feature elimination object
+    rfe = RFE(lr, n_features_to_select=2)
+
+    # Fit the RFE object to the data
+    rfe = rfe.fit(features, data)
+
+    # Print the ranking of the features
+    print(rfe.ranking_)
+
+
+
 def loadfit(filename):
     return np.loadtxt(filename)
 
