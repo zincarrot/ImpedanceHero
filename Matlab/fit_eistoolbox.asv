@@ -1,0 +1,63 @@
+function [pbest,zbest,fval]=fit_eistoolbox( ...
+    data, ...           % input data
+    circuitstring, ...  % circuit model (string representation)
+    lfb, ...            % lower frequency bound
+    ufb, ...            % upper frequency bound
+    pbest1, ...          % initial parameters
+    LB, ...             % lower boundary conditions for parameters
+    UB, ...             % upper boundary conditions for parameters
+    algorithm, ...      % algorithm number
+    weighting, ...      % weighting type number
+    maxiter ...         % max number of iterations
+    )
+
+fdata=data(1,:);
+data_idx=(fdata>=lfb)&(fdata<=ufb);
+fdata_select=fdata(data_idx);
+ndata=size(data,1)-1;
+
+pbest=zeros(ndata,size(pbest1,2));
+zbest=zeros(ndata,size(fdata_select,2));
+fval=zeros(ndata);
+
+fprintf("computing:%d\n",1)
+    data1(:,1)=fdata_select';
+    data1(:,2)=real(data(2,data_idx))';
+    data1(:,3)=imag(data(2,data_idx))';
+    [pbest1,zbest1,fval1]= fitting_engine( ...
+        data1, ...           % input data
+        circuitstring, ...  % circuit model (string representation)
+        pbest1, ...          % initial parameters
+        LB, ...             % lower boundary conditions for parameters
+        UB, ...             % upper boundary conditions for parameters
+        2, ...      % algorithm number
+        weighting, ...      % weighting type number
+        10000 ...         % max number of iterations
+        );
+    pbest(1,:)=pbest1;
+    zbest(1,:)=zbest1(:,1)+1j*zbest1(:,2);
+    fval(1)=fval1;
+
+for i=1:ndata
+    if any(isnan(data(i+1,data_idx)))
+        continue
+    fprintf("computing:%d",i)
+    data1(:,1)=fdata_select';
+    data1(:,2)=real(data(i+1,data_idx))';
+    data1(:,3)=imag(data(i+1,data_idx))';
+    [pbest1,zbest1,fval1]= fitting_engine( ...
+        data1, ...           % input data
+        circuitstring, ...  % circuit model (string representation)
+        pbest1, ...          % initial parameters
+        LB, ...             % lower boundary conditions for parameters
+        UB, ...             % upper boundary conditions for parameters
+        algorithm, ...      % algorithm number
+        weighting, ...      % weighting type number
+        maxiter ...         % max number of iterations
+        );
+    pbest(i,:)=pbest1;
+    zbest(i,:)=zbest1(:,1)+1j*zbest1(:,2);
+    fval(i)=fval1;
+    fprintf("   fval=%d\n",fval1)
+end
+end
